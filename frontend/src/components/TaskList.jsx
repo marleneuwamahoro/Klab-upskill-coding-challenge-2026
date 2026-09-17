@@ -1,47 +1,74 @@
 function TaskList({ tasks, onEdit, onDelete, onToggleStatus }) {
   if (tasks.length === 0) {
-    return <p>No tasks found.</p>;
+    return (
+      <div className="empty-state">
+        <p>No tasks found.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="task-grid">
-      {tasks.map((task) => (
-        <div className="task-card" key={task.id}>
-          <h3>{task.title}</h3>
+    <div className="table-container">
+      <table className="task-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-          <p>{task.description}</p>
+        <tbody>
+          {tasks.map((task) => (
+            <tr key={task.id}>
+              <td>
+                <strong>{task.title}</strong>
+              </td>
 
-          <p>
-            <strong>Status:</strong>{" "}
-            {task.status === "COMPLETED" ? "Completed" : "Pending"}
-          </p>
+              <td>{task.description}</td>
 
-          <p>
-            <strong>Priority:</strong>{" "}
-            {task.priority}
-          </p>
+              <td>
+                {task.status === "COMPLETED"
+                  ? "Completed"
+                  : "Pending"}
+              </td>
 
-          <p>
-            <strong>Created:</strong> {task.createdAt}
-          </p>
+              <td>{task.priority}</td>
 
-          <div className="task-actions">
-            <button onClick={() => onToggleStatus(task)}>
-              {task.status === "COMPLETED"
-                ? "Mark Pending"
-                : "Mark Completed"}
-            </button>
+              <td>
+                {new Date(task.createdAt).toLocaleDateString()}
+              </td>
 
-            <button onClick={() => onEdit(task)}>
-              Edit
-            </button>
+              <td>
+                <div className="table-actions">
+                  <button
+                    onClick={() => onToggleStatus(task)}
+                  >
+                    {task.status === "COMPLETED"
+                      ? "Pending"
+                      : "Complete"}
+                  </button>
 
-            <button onClick={() => onDelete(task.id)}>
-              Delete
-            </button>
-          </div>
-        </div>
-      ))}
+                  <button
+                    onClick={() => onEdit(task)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => onDelete(task.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

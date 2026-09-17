@@ -1,27 +1,43 @@
 function TaskList({ tasks, onEdit, onDelete, onToggleStatus }) {
+  if (tasks.length === 0) {
+    return <p>No tasks found.</p>;
+  }
+
   return (
-    <div>
+    <div className="task-grid">
       {tasks.map((task) => (
-        <div key={task.id}>
+        <div className="task-card" key={task.id}>
           <h3>{task.title}</h3>
 
           <p>{task.description}</p>
 
-          <p>Status: {task.status}</p>
+          <p>
+            <strong>Status:</strong> {task.status}
+          </p>
 
-          <p>Priority: {task.priority}</p>
+          <p>
+            <strong>Priority:</strong> {task.priority}
+          </p>
 
-          <button onClick={() => onToggleStatus(task)}>
-            {task.status === "Completed" ? "Mark Pending" : "Mark Completed"}
-          </button>
+          <p>
+            <strong>Created:</strong> {task.createdAt}
+          </p>
 
-          <button onClick={() => onEdit(task)}>
-            Edit
-          </button>
+          <div className="task-actions">
+            <button onClick={() => onToggleStatus(task)}>
+              {task.status === "Completed"
+                ? "Mark Pending"
+                : "Mark Completed"}
+            </button>
 
-          <button onClick={() => onDelete(task.id)}>
-            Delete
-          </button>
+            <button onClick={() => onEdit(task)}>
+              Edit
+            </button>
+
+            <button onClick={() => onDelete(task.id)}>
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 function TaskForm({ onSubmit, editingTask, onCancel }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("Pending");
-  const [priority, setPriority] = useState("Medium");
+ const [status, setStatus] = useState("PENDING");
+const [priority, setPriority] = useState("MEDIUM");
 
   useEffect(() => {
     if (editingTask) {
@@ -15,8 +15,8 @@ function TaskForm({ onSubmit, editingTask, onCancel }) {
     } else {
       setTitle("");
       setDescription("");
-      setStatus("Pending");
-      setPriority("Medium");
+      setStatus("PENDING");
+      setPriority("MEDIUM");
     }
   }, [editingTask]);
 
@@ -59,21 +59,21 @@ function TaskForm({ onSubmit, editingTask, onCancel }) {
         />
 
         <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-        >
-          <option value="Pending">Pending</option>
-          <option value="Completed">Completed</option>
-        </select>
+  value={status}
+  onChange={(e) => setStatus(e.target.value)}
+>
+  <option value="PENDING">Pending</option>
+  <option value="COMPLETED">Completed</option>
+</select>
 
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        >
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
+<select
+  value={priority}
+  onChange={(e) => setPriority(e.target.value)}
+>
+  <option value="LOW">Low</option>
+  <option value="MEDIUM">Medium</option>
+  <option value="HIGH">High</option>
+</select>
 
         <button type="submit">
           {editingTask ? "Update Task" : "Create Task"}

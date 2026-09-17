@@ -13,13 +13,21 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
   const [filter, setFilter] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const loadTasks = async () => {
     try {
+      setLoading(true);
+      setError("");
+
       const data = await getTasks();
       setTasks(data);
     } catch (error) {
       console.error(error);
+      setError("Unable to load tasks.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,29 +37,40 @@ function App() {
 
   const handleCreate = async (task) => {
     try {
+      setError("");
       await createTask(task);
       await loadTasks();
     } catch (error) {
       console.error(error);
+      setError("Unable to create task.");
     }
   };
 
   const handleUpdate = async (task) => {
     try {
+      setError("");
+
       await updateTask(editingTask.id, task);
+
       setEditingTask(null);
+
       await loadTasks();
     } catch (error) {
       console.error(error);
+      setError("Unable to update task.");
     }
   };
 
   const handleDelete = async (id) => {
     try {
+      setError("");
+
       await deleteTask(id);
+
       await loadTasks();
     } catch (error) {
       console.error(error);
+      setError("Unable to delete task.");
     }
   };
 
@@ -60,6 +79,8 @@ function App() {
       task.status === "Completed" ? "Pending" : "Completed";
 
     try {
+      setError("");
+
       await updateTask(task.id, {
         title: task.title,
         description: task.description,
@@ -70,6 +91,7 @@ function App() {
       await loadTasks();
     } catch (error) {
       console.error(error);
+      setError("Unable to update task status.");
     }
   };
 
@@ -85,6 +107,8 @@ function App() {
     <div>
       <h1>Task Management System</h1>
 
+      {error && <p>{error}</p>}
+
       <TaskForm
         onSubmit={editingTask ? handleUpdate : handleCreate}
         editingTask={editingTask}
@@ -94,19 +118,29 @@ function App() {
       <hr />
 
       <div>
-        <button onClick={() => setFilter("All")}>All</button>
-        <button onClick={() => setFilter("Pending")}>Pending</button>
+        <button onClick={() => setFilter("All")}>
+          All
+        </button>
+
+        <button onClick={() => setFilter("Pending")}>
+          Pending
+        </button>
+
         <button onClick={() => setFilter("Completed")}>
           Completed
         </button>
       </div>
 
-      <TaskList
-        tasks={filteredTasks}
-        onEdit={setEditingTask}
-        onDelete={handleDelete}
-        onToggleStatus={handleToggleStatus}
-      />
+      {loading ? (
+        <p>Loading tasks...</p>
+      ) : (
+        <TaskList
+          tasks={filteredTasks}
+          onEdit={setEditingTask}
+          onDelete={handleDelete}
+          onToggleStatus={handleToggleStatus}
+        />
+      )}
     </div>
   );
 }

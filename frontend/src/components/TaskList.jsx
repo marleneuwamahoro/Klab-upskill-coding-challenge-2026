@@ -1,29 +1,74 @@
 function TaskList({ tasks, onEdit, onDelete, onToggleStatus }) {
+  if (tasks.length === 0) {
+    return (
+      <div className="empty-state">
+        <p>No tasks found.</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      {tasks.map((task) => (
-        <div key={task.id}>
-          <h3>{task.title}</h3>
+    <div className="table-container">
+      <table className="task-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-          <p>{task.description}</p>
+        <tbody>
+          {tasks.map((task) => (
+            <tr key={task.id}>
+              <td>
+                <strong>{task.title}</strong>
+              </td>
 
-          <p>Status: {task.status}</p>
+              <td>{task.description}</td>
 
-          <p>Priority: {task.priority}</p>
+              <td>
+                {task.status === "COMPLETED"
+                  ? "Completed"
+                  : "Pending"}
+              </td>
 
-          <button onClick={() => onToggleStatus(task)}>
-            {task.status === "Completed" ? "Mark Pending" : "Mark Completed"}
-          </button>
+              <td>{task.priority}</td>
 
-          <button onClick={() => onEdit(task)}>
-            Edit
-          </button>
+              <td>
+                {new Date(task.createdAt).toLocaleDateString()}
+              </td>
 
-          <button onClick={() => onDelete(task.id)}>
-            Delete
-          </button>
-        </div>
-      ))}
+              <td>
+                <div className="table-actions">
+                  <button
+                    onClick={() => onToggleStatus(task)}
+                  >
+                    {task.status === "COMPLETED"
+                      ? "Pending"
+                      : "Complete"}
+                  </button>
+
+                  <button
+                    onClick={() => onEdit(task)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => onDelete(task.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

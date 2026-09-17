@@ -103,46 +103,65 @@ function App() {
     return task.status === filter;
   });
 
-  return (
-    <div>
+return (
+  <div className="app">
+    <header className="app-header">
       <h1>Task Management System</h1>
+    </header>
 
-      {error && <p>{error}</p>}
+    {error && (
+      <p className="error-message">
+        {error}
+      </p>
+    )}
 
-      <TaskForm
-        onSubmit={editingTask ? handleUpdate : handleCreate}
-        editingTask={editingTask}
-        onCancel={() => setEditingTask(null)}
-      />
+    <TaskForm
+      onSubmit={editingTask ? handleUpdate : handleCreate}
+      editingTask={editingTask}
+      onCancel={() => setEditingTask(null)}
+    />
 
-      <hr />
+    <div className="filter-container">
+      <button
+        className={`filter-button ${
+          filter === "All" ? "active" : ""
+        }`}
+        onClick={() => setFilter("All")}
+      >
+        All
+      </button>
 
-      <div>
-        <button onClick={() => setFilter("All")}>
-          All
-        </button>
+      <button
+        className={`filter-button ${
+          filter === "Pending" ? "active" : ""
+        }`}
+        onClick={() => setFilter("Pending")}
+      >
+        Pending
+      </button>
 
-        <button onClick={() => setFilter("Pending")}>
-          Pending
-        </button>
-
-        <button onClick={() => setFilter("Completed")}>
-          Completed
-        </button>
-      </div>
-
-      {loading ? (
-        <p>Loading tasks...</p>
-      ) : (
-        <TaskList
-          tasks={filteredTasks}
-          onEdit={setEditingTask}
-          onDelete={handleDelete}
-          onToggleStatus={handleToggleStatus}
-        />
-      )}
+      <button
+        className={`filter-button ${
+          filter === "Completed" ? "active" : ""
+        }`}
+        onClick={() => setFilter("Completed")}
+      >
+        Completed
+      </button>
     </div>
-  );
+
+    {loading ? (
+      <p>Loading tasks...</p>
+    ) : (
+      <TaskList
+        tasks={filteredTasks}
+        onEdit={setEditingTask}
+        onDelete={handleDelete}
+        onToggleStatus={handleToggleStatus}
+      />
+    )}
+  </div>
+);
 }
 
 export default App;

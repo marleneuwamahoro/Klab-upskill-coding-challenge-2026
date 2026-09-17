@@ -4,10 +4,19 @@ from .serializers import TaskSerializer
 
 
 class TaskListCreateView(generics.ListCreateAPIView):
-    queryset = Task.objects.all().order_by("-createdAt")
     serializer_class = TaskSerializer
 
+    def get_queryset(self):
+        queryset = Task.objects.all().order_by("-createdAt")
 
-class TaskDetailView(generics.RetrieveAPIView):
+        status = self.request.query_params.get("status")
+
+        if status:
+            queryset = queryset.filter(status=status.upper())
+
+        return queryset
+
+
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer

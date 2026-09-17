@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import {
   getTasks,
   createTask,
@@ -12,7 +13,7 @@ import TaskForm from "./components/TaskForm";
 function App() {
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -38,6 +39,7 @@ function App() {
   const handleCreate = async (task) => {
     try {
       setError("");
+
       await createTask(task);
       await loadTasks();
     } catch (error) {
@@ -53,7 +55,6 @@ function App() {
       await updateTask(editingTask.id, task);
 
       setEditingTask(null);
-
       await loadTasks();
     } catch (error) {
       console.error(error);
@@ -66,7 +67,6 @@ function App() {
       setError("");
 
       await deleteTask(id);
-
       await loadTasks();
     } catch (error) {
       console.error(error);
@@ -76,7 +76,9 @@ function App() {
 
   const handleToggleStatus = async (task) => {
     const newStatus =
-      task.status === "Completed" ? "Pending" : "Completed";
+      task.status === "COMPLETED"
+        ? "PENDING"
+        : "COMPLETED";
 
     try {
       setError("");
@@ -96,72 +98,76 @@ function App() {
   };
 
   const filteredTasks = tasks.filter((task) => {
-    if (filter === "All") {
+    if (filter === "ALL") {
       return true;
     }
 
     return task.status === filter;
   });
 
-return (
-  <div className="app">
-    <header className="app-header">
-      <h1>Task Management System</h1>
-    </header>
+  return (
+    <div className="app">
+      <header className="app-header">
+        <h1>Task Management System</h1>
+      </header>
 
-    {error && (
-      <p className="error-message">
-        {error}
-      </p>
-    )}
+      {error && (
+        <p className="error-message">
+          {error}
+        </p>
+      )}
 
-    <TaskForm
-      onSubmit={editingTask ? handleUpdate : handleCreate}
-      editingTask={editingTask}
-      onCancel={() => setEditingTask(null)}
-    />
-
-    <div className="filter-container">
-      <button
-        className={`filter-button ${
-          filter === "All" ? "active" : ""
-        }`}
-        onClick={() => setFilter("All")}
-      >
-        All
-      </button>
-
-      <button
-        className={`filter-button ${
-          filter === "Pending" ? "active" : ""
-        }`}
-        onClick={() => setFilter("Pending")}
-      >
-        Pending
-      </button>
-
-      <button
-        className={`filter-button ${
-          filter === "Completed" ? "active" : ""
-        }`}
-        onClick={() => setFilter("Completed")}
-      >
-        Completed
-      </button>
-    </div>
-
-    {loading ? (
-      <p>Loading tasks...</p>
-    ) : (
-      <TaskList
-        tasks={filteredTasks}
-        onEdit={setEditingTask}
-        onDelete={handleDelete}
-        onToggleStatus={handleToggleStatus}
+      <TaskForm
+        onSubmit={
+          editingTask
+            ? handleUpdate
+            : handleCreate
+        }
+        editingTask={editingTask}
+        onCancel={() => setEditingTask(null)}
       />
-    )}
-  </div>
-);
+
+      <div className="filter-container">
+        <button
+          className={`filter-button ${
+            filter === "ALL" ? "active" : ""
+          }`}
+          onClick={() => setFilter("ALL")}
+        >
+          All
+        </button>
+
+        <button
+          className={`filter-button ${
+            filter === "PENDING" ? "active" : ""
+          }`}
+          onClick={() => setFilter("PENDING")}
+        >
+          Pending
+        </button>
+
+        <button
+          className={`filter-button ${
+            filter === "COMPLETED" ? "active" : ""
+          }`}
+          onClick={() => setFilter("COMPLETED")}
+        >
+          Completed
+        </button>
+      </div>
+
+      {loading ? (
+        <p>Loading tasks...</p>
+      ) : (
+        <TaskList
+          tasks={filteredTasks}
+          onEdit={setEditingTask}
+          onDelete={handleDelete}
+          onToggleStatus={handleToggleStatus}
+        />
+      )}
+    </div>
+  );
 }
 
 export default App;

@@ -12,11 +12,13 @@ function TaskList({ tasks, onEdit, onDelete, onToggleStatus }) {
           <p>{task.description}</p>
 
           <p>
-            <strong>Status:</strong> {task.status}
+            <strong>Status:</strong>{" "}
+            {task.status === "COMPLETED" ? "Completed" : "Pending"}
           </p>
 
           <p>
-            <strong>Priority:</strong> {task.priority}
+            <strong>Priority:</strong>{" "}
+            {task.priority}
           </p>
 
           <p>
@@ -25,7 +27,7 @@ function TaskList({ tasks, onEdit, onDelete, onToggleStatus }) {
 
           <div className="task-actions">
             <button onClick={() => onToggleStatus(task)}>
-              {task.status === "Completed"
+              {task.status === "COMPLETED"
                 ? "Mark Pending"
                 : "Mark Completed"}
             </button>

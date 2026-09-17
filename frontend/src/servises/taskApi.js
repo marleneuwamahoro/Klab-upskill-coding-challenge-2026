@@ -2,23 +2,27 @@ import axios from "axios";
 
 const API_URL = "http://127.0.0.1:8000/api/tasks/";
 
-export const getTasks = (status = "") => {
-  const params = status ? { status } : {};
-  return axios.get(API_URL, { params });
+export const getTasks = async () => {
+  const response = await axios.get(API_URL);
+  return response.data;
 };
 
-export const getTask = (id) => {
-  return axios.get(`${API_URL}${id}/`);
+export const getTask = async (id) => {
+  const response = await axios.get(`${API_URL}${id}/`);
+  return response.data;
 };
 
-export const createTask = (task) => {
-  return axios.post(API_URL, task);
+export const createTask = async (task) => {
+  const response = await axios.post(API_URL, task);
+  return response.data;
 };
 
-export const updateTask = (id, task) => {
-  return axios.put(`${API_URL}${id}/`, task);
+export const updateTask = async (id, task) => {
+  const response = await axios.put(`${API_URL}${id}/`, task);
+  return response.data;
 };
 
-export const deleteTask = (id) => {
-  return axios.delete(`${API_URL}${id}/`);
+export const deleteTask = async (id) => {
+  const response = await axios.delete(`${API_URL}${id}/`);
+  return response.data;
 };
